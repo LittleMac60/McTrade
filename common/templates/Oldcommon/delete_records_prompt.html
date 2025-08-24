@@ -1,0 +1,37 @@
+{% extends 'common/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <!-- ✅ Messages block first for visibility -->
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h4 class="mb-0">🗑️ Select COB Date to Delete Records</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" class="row g-3">
+                {% csrf_token %}
+                <div class="col-md-4">
+                    <label for="id_cob_date" class="form-label">COB Date</label>
+                    {{ form.cob_date }}
+                </div>
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-danger">Delete Records</button>
+                    <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

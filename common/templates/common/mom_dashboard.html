@@ -1,0 +1,73 @@
+{% extends 'common/base.html' %}
+{% load sort_tags %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center mb-4">📈 Momentum Dashboard</h2>
+
+  <!-- 🔍 Filter Form -->
+  <form method="get" class="row g-3 mb-4">
+    {% for field in filter.form %}
+    <div class="col-md-3">
+      <label class="form-label">{{ field.label }}</label>
+      {{ field }}
+    </div>
+    {% endfor %}
+    <div class="col-md-3 align-self-end">
+      <button type="submit" class="btn btn-primary">Filter</button>
+      <a href="{% url 'export_stocks_csv' %}?{{ request.GET.urlencode }}" class="btn btn-success">Export CSV</a>
+    </div>
+  </form>
+
+  <!-- 📊 Momentum Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Ticker</th>
+          <th>Golden Cross</th>
+          <th>Death Cross</th>
+          <th>MACD Bullish</th>
+          <th>RSI</th>
+          <th>Near 52w High</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in page_obj %}
+        <tr>
+          <td><strong>{{ row.0 }}</strong></td>
+          <td class="{% if row.1 %}table-success{% else %}table-danger{% endif %}">{{ row.1 }}</td>
+          <td class="{% if row.2 %}table-danger{% else %}table-success{% endif %}">{{ row.2 }}</td>
+          <td class="{% if row.3 %}table-success{% else %}table-warning{% endif %}">{{ row.3 }}</td>
+          <td>{{ row.4 }}</td>
+          <td class="{% if row.5 %}table-success{% else %}table-secondary{% endif %}">{{ row.5 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center">No momentum data found.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 📄 Pagination -->
+  <nav>
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ querystring }}">Previous</a>
+      </li>
+      {% endif %}
+      <li class="page-item disabled">
+        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+      </li>
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ querystring }}">Next</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endblock %}

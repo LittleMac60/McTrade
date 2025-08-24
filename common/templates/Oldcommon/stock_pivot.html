@@ -1,0 +1,106 @@
+{% extends 'common/base.html' %}
+{% load custom_tags %}
+
+<style>
+    .pivot-table th {
+        white-space: nowrap;
+        font-size: 0.75rem; /* Smaller font size */
+        padding: 6px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">📊 Stock Pivot by IG Symbol</h2>
+    <form method="get" class="row g-3 mb-4">
+        {% for field in filter.form %}
+        <div class="col-md-3">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <div class="col-md-3 align-self-end">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{% url 'export_stocks_pivot_csv' %}?{{ request.GET.urlencode }}" class="btn btn-success">Export Pivot CSV</a>
+        </div>
+    </form>
+    <tbody>
+        <style>
+            .pivot-table th {
+                white-space: nowrap;
+                font-size: 0.75rem; /* Smaller font size */
+                padding: 6px;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+        </style>
+
+        {% if has_data %}
+            <table class="table table-bordered table-striped pivot-table">
+                <thead>
+                    <tr>
+                        {% for col in columns %}
+                            <th>
+                                <a href="?sort_by={{ col }}&sort_order={% if col == sort_by and sort_order == 'asc' %}desc{% else %}asc{% endif %}&{{ clean_querystring }}">
+                                    {{ col }}
+                                    {% if col == sort_by %}
+                                        {% if sort_order == "asc" %}
+                                            ▲
+                                        {% else %}
+                                            ▼
+                                        {% endif %}
+                                    {% endif %}
+                                </a>
+                            </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for row in page_obj %}
+                        <tr>
+                            {% for cell in row %}
+                                <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls -->
+            <nav>
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&{{ clean_querystring }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}&{{ clean_querystring }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% else %}
+            <div class="alert alert-warning mt-3">
+                No results found for the selected filters. Try adjusting your criteria or check back later.
+            </div>
+        {% endif %}
+    
+    </tbody>
+    </table>
+</div>
+{% endblock %}
+

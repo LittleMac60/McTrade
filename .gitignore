@@ -1,0 +1,10 @@
+*.pyc
+__pycache__/
+db.sqlite3
+/static/
+/media/
+/env/
+/venv/
+*.log
+*.sqlite3
+mctrade_venv/

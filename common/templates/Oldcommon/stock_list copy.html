@@ -1,0 +1,79 @@
+{% extends 'common/base.html' %}
+{% load humanize %}
+{% load sort_tags %}
+
+{% block content %}
+<body class="bg-light">
+<div class="container mt-5">
+    <h2 class="mb-4">📊 Stock Listings</h2>
+
+    <form method="get" class="row g-3 mb-4">
+        {% for field in filter.form %}
+        <div class="col-md-3">
+            <label class="form-label">{{ field.label }}</label>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <div class="col-md-3 align-self-end">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="{% url 'export_stocks_csv' %}?{{ request.GET.urlencode }}" class="btn btn-success">Export CSV</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th><a href="{% sort_link 'igsymbol' request.GET %}">IG Symbol {% if current_sort == 'igsymbol' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                    <th><a href="{% sort_link 'cmcsymbol' request.GET %}">CMC Symbol {% if current_sort == 'cmcsymbol' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                    <th><a href="{% sort_link 'tvsymbol' request.GET %}">TV Symbol {% if current_sort == 'tvsymbol' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                    <th><a href="{% sort_link 'symbol_name' request.GET %}">Symbol Name {% if current_sort == 'symbol_name' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                    <th><a href="{% sort_link 'symbol_industry' request.GET %}">Industry {% if current_sort == 'symbol_industry' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                    <th><a href="{% sort_link 'country_code' request.GET %}">Country {% if current_sort == 'country_code' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                    <th><a href="{% sort_link 'exchange' request.GET %}">Exchange {% if current_sort == 'exchange' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                    <th><a href="{% sort_link 'scan_name' request.GET %}">Scan Name {% if current_sort == 'scan_name' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                    <th><a href="{% sort_link 'trade_type' request.GET %}">Trade Type {% if current_sort == 'trade_type' %}{% if current_dir == 'asc' %}▲{% else %}▼{% endif %}{% endif %}</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for search_result in page_obj %}
+                <tr>
+                    <td>{{ search_result.igsymbol }}</td>
+                    <td>{{ search_result.cmcsymbol }}</td>
+                    <td>{{ search_result.tvsymbol }}</td>
+                    <td>{{ search_result.symbol_name }}</td>
+                    <td>{{ search_result.symbol_industry }}</td>
+                    <td>{{ search_result.country_code }}</td>
+                    <td>{{ search_result.exchange }}</td>
+                    <td>{{ search_result.scan_name }}</td>
+                    <td>{{ search_result.trade_type }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">No stocks found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <nav>
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Previous</a>
+            </li>
+            {% endif %}
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            </li>
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if querystring %}&{{ querystring }}{% endif %}">Next</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+</body>
+{% endblock %}

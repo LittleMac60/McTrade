@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Features</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Pricing</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Australian Trading
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'au_crud_process' %}">Load all search results</a></li>
+            <li><a class="dropdown-item" href="{% url 'au_delete_search_results' %}">Delete all search results records</a></li>
+            <li><a class="dropdown-item" href="{% url 'au_crud_delete_files' %}">Delete all search result files</a></li>
+            <li><a class="dropdown-item" href="{% url 'stock_list' %}">Display stock list</a></li>
+            <li><a class="dropdown-item" href="{% url 'stock_pivot' %}">Display stock pivot</a></li>
+            <li><a class="dropdown-item" href="{% url 'au_mom_dashboard' %}">Momentum Dashboard</a></li>
+            <li><a class="dropdown-item" href="{% url 'stock_search_view' %}">Display stock view</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            United States Trading
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'us_crud_process' %}">Load all search results</a></li>
+            <li><a class="dropdown-item" href="{% url 'us_delete_search_results' %}">Delete all search results</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            United Kingdom Trading
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'uk_crud_process' %}">Load all search results</a></li>
+            <li><a class="dropdown-item" href="{% url 'uk_delete_search_results' %}">Delete all search results</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
